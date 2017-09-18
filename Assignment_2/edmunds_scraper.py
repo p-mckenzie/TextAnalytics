@@ -30,7 +30,7 @@ def extract_message(soup_page):
     ret_message = []
     raw_message = soup_page.select('.Message')
     for rowno,row in enumerate(raw_message):
-        ret_message.append(row.text.strip())
+        ret_message.append(row.text.encode('utf-8').strip())
     return(ret_message)
 
 
@@ -39,7 +39,7 @@ final_date = []
 final_time = []
 final_message = []
 
-num_records = 5000
+num_records = 3000
 num_pages = num_records/30
 string = "p"
 webpg_ending = []
