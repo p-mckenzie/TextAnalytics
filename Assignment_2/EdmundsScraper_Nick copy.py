@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 import pandas as pd
 from itertools import izip_longest
 
-ForumURL = "https://forums.edmunds.com/discussion/7526/general/x/midsize-sedans-2-0/p""
+ForumURL = "https://forums.edmunds.com/discussion/7526/general/x/midsize-sedans-2-0/p"
 
 def Scraper(ForumURL, npages): # Input the number of pages you want to scrape.
     tableResults = []
