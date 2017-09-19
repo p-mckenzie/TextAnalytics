@@ -39,14 +39,14 @@ final_date = []
 final_time = []
 final_message = []
 
-num_records = 3000
+num_records = 9000
 num_pages = num_records/30
 string = "p"
 webpg_ending = []
 for i in range(num_pages):
     if(i == 0):
         continue
-    webpg_ending.append(string+`i`)
+    webpg_ending.append(string+'i')
 
 url = 'https://forums.edmunds.com/discussion/2864/general/x/entry-level-luxury-performance-sedans'
 
