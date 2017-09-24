@@ -39,7 +39,7 @@ final_date = []
 final_time = []
 final_message = []
 
-num_records = 3000
+num_records = 10000
 num_pages = num_records/30
 string = "p"
 webpg_ending = []
