@@ -52,4 +52,41 @@ mp <- ggplot() +   mapWorld
 
 #Now Layer the cities on top
 mp <- mp+ geom_point(data=map_wine_finish,aes(x=lon, y=lat,size=count,color=country))
-mp + theme_map() + theme(strip.background=element_blank()) + theme(legend.position="none")
+mp + theme_map() +
+  theme(strip.background=element_blank()) +
+  theme(legend.position="none") +
+  labs(title="Top Wine Locations in the World") +
+  theme(plot.title = element_text(size=22))
+
+
+### Ridge Plots to show price per country
+library(ggridges)
+
+wine_country <- wine_df %>% group_by(country) %>% summarize(count=n()) %>% filter(count>500)
+wine_country_plot <- inner_join(wine_df,wine_country,by="country") %>% filter(price<100)
+
+a <- ggplot(wine_country_plot, aes(x = price, y = country)) +
+  geom_density_ridges(scale = 1) + theme_ridges() +
+  scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
+  scale_x_continuous(expand = c(0, 0)) + scale_x_continuous(labels = dollar) +
+  labs(x="Price USD$",y="Country")
+
+crosstab <- table(wine_df$variety,wine_df$region_2)
+bool <- (rowSums(crosstab)>500)
+variety_names <- names(which(bool==TRUE))
+
+
+wine_variety_df <- wine_df %>% filter(variety %in% variety_names)
+wine_variety_df <- wine_variety_df %>% group_by(variety) %>% summarize(med_price = median(price,na.rm=TRUE))
+med_value <- median(wine_df$price,na.rm=TRUE)
+
+library(scales)
+b <- ggplot(wine_variety_df) +
+  geom_bar(aes(x=reorder(variety,med_price),y=med_price),stat = "identity",fill="blue") +
+  theme_bw() +
+  geom_hline(aes(yintercept=med_value,color="red")) +
+  labs(x="Wine Variety",y="Median Price USD$") + theme(legend.position="none") + coord_flip() +
+  scale_y_continuous(labels = dollar)
+
+library(cowplot)
+plot_grid(a,b)
