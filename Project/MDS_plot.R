@@ -37,7 +37,16 @@ ggplot(MDS_df) +
   theme_solarized_2(light = FALSE) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
-   
-
+### Attempt a polar plot to see if there are differences.    
+ggplot(MDS_df,aes(x=x_vals,y=y_vales)) +
+  geom_point(size = 5, color = 'grey') +
+  geom_text_repel(
+    aes(x_vals, y_vales, label = names),
+    fontface = 'bold', color = 'green',
+    box.padding = 0.35, point.padding = 0.5,
+    segment.color = 'grey50') + 
+  coord_polar() 
+  
+ 
 
 
