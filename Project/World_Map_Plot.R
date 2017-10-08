@@ -27,7 +27,7 @@ geo_pause <- function(locat){
 
 loc_subset$loc_det <- apply(loc_subset,1,geo_pause)
 saveRDS(loc_subset,"location.RDS",compress = FALSE)
-
+loc_subset <- readRDS("location.RDS")
 loc_subset <- loc_subset %>% unnest()
 
 ### Merge Locations back
@@ -65,6 +65,7 @@ library(ggridges)
 wine_country <- wine_df %>% group_by(country) %>% summarize(count=n()) %>% filter(count>500)
 wine_country_plot <- inner_join(wine_df,wine_country,by="country") %>% filter(price<100)
 
+library(scales)
 a <- ggplot(wine_country_plot, aes(x = price, y = country)) +
   geom_density_ridges(scale = 1) + theme_ridges() +
   scale_y_discrete(expand = c(0.01, 0)) +   # will generally have to set the `expand` option
@@ -80,13 +81,13 @@ wine_variety_df <- wine_df %>% filter(variety %in% variety_names)
 wine_variety_df <- wine_variety_df %>% group_by(variety) %>% summarize(med_price = median(price,na.rm=TRUE))
 med_value <- median(wine_df$price,na.rm=TRUE)
 
-library(scales)
+
 b <- ggplot(wine_variety_df) +
   geom_bar(aes(x=reorder(variety,med_price),y=med_price),stat = "identity",fill="blue") +
-  theme_bw() +
+  theme_ridges() +
   geom_hline(aes(yintercept=med_value,color="red")) +
   labs(x="Wine Variety",y="Median Price USD$") + theme(legend.position="none") + coord_flip() +
-  scale_y_continuous(labels = dollar)
+  scale_y_continuous(labels = dollar,expand = c(0.01, 0)) + scale_x_discrete(expand = c(0, 0))
 
 library(cowplot)
 plot_grid(a,b)
